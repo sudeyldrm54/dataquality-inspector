@@ -12,5 +12,27 @@ Programming language: Python (planned)
 Web framework: To be determined
 Data processing: To be determined
 User interface: Web-based interface
+## Planned Features
+- Upload structured datasets in CSV or Excel format.
+- Detect common data quality issues, such as missing values, duplicate records, and inconsistent categories.
+- Identify potentially unusual numerical values for user review.
+- Suggest possible data cleaning actions.
+- Allow users to review proposed changes before applying them.
+- Provide a summary of data quality before and after cleaning.
+- Identify when the available data may be insufficient and suggest whether additional data collection is needed.
+### In Scope
+- Initial support for structured CSV and Excel datasets.
+- Detection and reporting of common data quality issues.
+- Suggested cleaning actions that users can review.
+- A basic data quality summary.
+### Out of Scope (Initial Version)
+- Real-time data processing.
+- Distributed or big-data processing.
+- Advanced machine-learning-based automatic correction.
+- Automatic collection from external sources before the data sources and method are defined.
 ## Current Status
-Week 1 - Project definition and research.
+**Week 2 – Requirements Engineering and Planning**
+- Reviewing the project definition and identifying prototype features.
+- Preparing functional and non-functional requirements.
+- Defining project scope, constraints, assumptions, and user stories.
+- Planning development milestones and organizing work through GitHub Issues.
