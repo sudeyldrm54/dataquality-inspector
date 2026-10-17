@@ -36,3 +36,7 @@ User interface: Web-based interface
 - Preparing functional and non-functional requirements.
 - Defining project scope, constraints, assumptions, and user stories.
 - Planning development milestones and organizing work through GitHub Issues.
+### GitHub Issues
+- [Issue #1: Define functional and non-functional requirements](https://github.com/sudeyldrm54/dataquality-inspector/issues/1) 
+- [Issue #2: Prepare project scope and use cases](https://github.com/sudeyldrm54/dataquality-inspector/issues/2) 
+- [Issue #3: Plan the first prototype](https://github.com/sudeyldrm54/dataquality-inspector/issues/3 ) 
