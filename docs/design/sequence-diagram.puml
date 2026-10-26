@@ -1,0 +1,40 @@
+@startuml
+autonumber
+skinparam style strictuml
+skinparam BoxPadding 10
+skinparam ParticipantPadding 10
+
+actor "User" as User
+box "Data Quality Inspector System" #LightYellow
+participant "User Interface\n(Web Browser)" as UI
+participant "File Handling\nComponent" as FileHandler
+participant "Error Message\nHandling" as ErrorHandler
+participant "Data Quality Analysis\nComponent" as Analyzer
+participant "Report Generation\nComponent" as Reporter
+participant "Cleaning & Comparison\nComponent" as Cleaner
+end box
+
+== Phase 1: Upload & File Validation ==
+User -> UI: Upload CSV file
+UI -> FileHandler: Send raw file stream
+alt File corrupted / invalid schema
+    FileHandler -> ErrorHandler: Trigger file reading error
+    ErrorHandler --> UI: Display validation error
+    UI --> User: Show error alert
+else Valid CSV format
+    FileHandler -> Analyzer: Forward validated dataset
+    
+    == Phase 2: Quality Inspection & Reporting ==
+    Analyzer -> Analyzer: Detect anomalies, missing values & types
+    Analyzer -> Reporter: Pass detected issues & analysis metrics
+    Reporter --> UI: Deliver quality report & cleaning suggestions
+    UI --> User: Render inspection dashboard
+end
+
+== Phase 3: User Approval & Safe Cleaning ==
+User -> UI: Approve suggested cleaning actions
+UI -> Cleaner: Dispatch user-approved cleaning rules
+Cleaner -> Cleaner: Execute transformations (Original preserved)
+Cleaner --> UI: Return cleaned dataset & Before/After diff
+UI --> User: Enable download & show comparative summary
+@enduml
