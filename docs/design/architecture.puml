@@ -1,0 +1,37 @@
+@startuml
+title Figure 1.1 - High-Level System Architecture of Data Quality Inspector
+
+left to right direction
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor User
+
+rectangle "Data Quality Inspector System" {
+    component "User Interface\n(Web Browser)" as UI
+    component "File Handling\nComponent" as FH
+    component "Data Quality Analysis\nComponent" as DA
+    component "Report Generation\nComponent" as RG
+    component "Cleaning and Data\nComparison Component" as CC
+    component "Error Message\nHandling" as EH
+
+    UI --> FH : Upload CSV file
+    FH --> DA : Validated dataset
+    DA --> RG : Detected issues\nand analysis results
+    RG --> UI : Quality report\nand cleaning suggestions
+    UI --> CC : User-approved\ncleaning action
+    CC --> UI : Cleaned dataset\nand before/after summary
+    FH --> EH : File reading error
+    EH --> UI : Display error message
+}
+
+User --> UI : Upload dataset\nReview report\nApprove cleaning
+
+note bottom of CC
+Cleaning actions are applied
+only after user approval.
+The original dataset is preserved.
+end note
+
+@enduml
