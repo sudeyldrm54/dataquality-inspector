@@ -160,6 +160,94 @@ if uploaded_file is not None:
                 mime="text/csv"
             )
 
+            # ---------- Cleaning Suggestions (FR-04) ----------
+            st.subheader("Cleaning Suggestions")
+
+            st.write(
+                "The following suggestions are based on the "
+                "detected data quality issues. "
+                "No changes are automatically applied to your dataset."
+            )
+
+            suggestions = []
+
+            # Suggestions for missing values
+            for column in df.columns:
+                missing_count = int(df[column].isna().sum())
+
+                if missing_count > 0:
+                    if pd.api.types.is_numeric_dtype(df[column]):
+                        if df[column].notna().any():
+                            mean_value = df[column].mean()
+                            suggestions.append({
+                                "Column": column,
+                                "Detected Issue": f"{missing_count} missing values",
+                                "Suggested Action": (
+                                    f"Fill missing values with the mean "
+                                    f"({mean_value:.2f})"
+                                )
+                            })
+                        else:
+                            suggestions.append({
+                                "Column": column,
+                                "Detected Issue": f"{missing_count} missing values",
+                                "Suggested Action": (
+                                    "No valid numeric values available "
+                                    "to calculate a mean"
+                                )
+                            })
+                    else:
+                        mode_values = df[column].mode(dropna=True)
+
+                        if not mode_values.empty:
+                            mode_value = mode_values.iloc[0]
+                            suggestions.append({
+                                "Column": column,
+                                "Detected Issue": f"{missing_count} missing values",
+                                "Suggested Action": (
+                                    f"Fill missing values with the most "
+                                    f"frequent value ({mode_value})"
+                                )
+                            })
+                        else:
+                            suggestions.append({
+                                "Column": column,
+                                "Detected Issue": f"{missing_count} missing values",
+                                "Suggested Action": (
+                                    "No existing value available "
+                                    "for filling"
+                                )
+                            })
+
+            # Suggestion for duplicate rows
+            if duplicate_count > 0:
+                suggestions.append({
+                    "Column": "All columns",
+                    "Detected Issue": f"{duplicate_count} duplicate rows",
+                    "Suggested Action": (
+                        "Review and consider removing duplicate rows"
+                    )
+                })
+
+            if suggestions:
+                suggestions_df = pd.DataFrame(suggestions)
+
+                st.dataframe(
+                    suggestions_df,
+                    use_container_width=True,
+                    hide_index=True
+                )
+
+                st.info(
+                    "These are recommendations only. "
+                    "Your original dataset has not been modified."
+                )
+            else:
+                st.success(
+                    "No cleaning suggestions are necessary. "
+                    "No missing values or duplicate rows were detected."
+                )
+
     except pd.errors.EmptyDataError:
         st.error(
             "The uploaded CSV file is empty. "
