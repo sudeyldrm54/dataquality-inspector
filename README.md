@@ -28,11 +28,15 @@ The target users are students, researchers, and data analysts who work with stru
 - Error messages for empty or unreadable files (NFR-02).
 - The original data is only read, not modified.
 
+### Implemented (Week 5 core implementation)
+- Single-column structural plausibility warning for non-tabular text files saved with a `.csv` extension (NFR-02).
+- Generate structured data quality reports summarizing check statuses (`Completed`, `Issues Found`, `Passed`) with downloadable CSV export (`data_quality_report.csv`) (FR-03).
+- Suggest possible data cleaning actions based on detected issues (mean imputation for numeric columns, mode imputation for categorical/text columns, and review for duplicate rows) (FR-04).
+- Modular separation of data quality analysis, report generation, and cleaning suggestion logic into `src/data_quality.py`.
+
 ### Planned
 - Detect inconsistent values and invalid entries.
 - Identify potentially unusual numerical values for user review.
-- Generate structured data quality reports (FR-03).
-- Suggest possible data cleaning actions (FR-04).
 - Allow users to review and approve proposed changes before applying them (FR-05).
 - Preserve the original dataset during cleaning.
 - Compare data quality before and after cleaning (FR-06).
@@ -62,7 +66,7 @@ The proposed system follows a modular architecture with separate components for:
 - Report Generation
 - Cleaning and Comparison
 
-In the Week 4 prototype, the User Interface, File Handling, Error Message Handling, and an initial version of the Data Quality Analysis component are implemented.
+In the Week 4 prototype, the User Interface, File Handling, Error Message Handling, and an initial version of the Data Quality Analysis component were implemented. In Week 5, the analytical, reporting, and cleaning suggestion functions were separated into `src/data_quality.py` alongside the Streamlit interface in `src/app.py`.
 
 ## Design Decisions
 - The first version focuses on CSV files.
@@ -73,28 +77,9 @@ In the Week 4 prototype, the User Interface, File Handling, Error Message Handli
 
 ## How to Run the Prototype
 Requirements: Python 3 and the packages listed in `requirements.txt`.
+```bash
 pip install -r requirements.txt
 streamlit run src/app.py
-Then open the local address shown in the terminal (usually http://localhost:8501).
-To generate the sample test files:
-python tests/make_test_files.py
-
-## Project Structure
-src/                          Application source code
-tests/                        Test data generator and verification results
-docs/architecture/            Architecture diagrams (Week 3)
-docs/development-stage-1.md   Development Stage 1 record
-evidence/week-04/             Screenshots and output evidence
-
-## Current Status
-
-### Week 4 – First Working Prototype
-- Implemented CSV upload with validation and error handling (FR-01, NFR-02).
-- Implemented dataset summary and preview.
-- Implemented missing value and duplicate row detection (FR-02).
-- Ran six preliminary verification checks (see `tests/verification.md`).
-- Known limitation: a plain text file saved with a .csv extension is accepted as a dataset, because it can be parsed by pandas.
-- Next step: structured quality report (FR-03) and cleaning suggestions (FR-04).
 
 ## GitHub Issues
 - [Issue #1: Define functional and non-functional requirements](https://github.com/sudeyldrm54/dataquality-inspector/issues/1)
