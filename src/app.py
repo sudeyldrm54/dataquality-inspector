@@ -30,7 +30,6 @@ if uploaded_file is not None:
         # ---------- Dataset information (FR-01) ----------
         st.subheader("Dataset Information")
 
-
         col1, col2, col3 = st.columns(3)
 
         with col1:
@@ -49,43 +48,124 @@ if uploaded_file is not None:
         st.subheader("Data Quality Check")
 
         if df.empty:
-            st.warning("The file contains no data rows, so no quality check was performed.")
+            st.warning(
+                "The file contains no data rows, "
+                "so no quality check was performed."
+            )
+
         else:
             # Missing values
             missing_per_column = df.isna().sum()
             total_missing = int(missing_per_column.sum())
             total_cells = df.shape[0] * df.shape[1]
-            missing_percent = (total_missing / total_cells) * 100
 
-            # Duplicate rows (the first occurrence is not counted)
+            missing_percent = (
+                (total_missing / total_cells) * 100
+                if total_cells > 0 else 0
+            )
+
+            # Duplicate rows
             duplicate_mask = df.duplicated()
             duplicate_count = int(duplicate_mask.sum())
 
             m1, m2, m3 = st.columns(3)
-            with m1:
 
+            with m1:
                 st.metric("Total Missing Values", total_missing)
+
             with m2:
-                st.metric("Missing Value Ratio", f"{missing_percent:.2f}%")
+                st.metric(
+                    "Missing Value Ratio",
+                    f"{missing_percent:.2f}%"
+                )
+
             with m3:
                 st.metric("Duplicate Rows", duplicate_count)
 
+            # Missing values per column
             st.markdown("**Missing values per column**")
+
             missing_table = pd.DataFrame({
                 "Column": missing_per_column.index,
                 "Missing Count": missing_per_column.values,
-                "Missing %": (missing_per_column.values / df.shape[0] * 100).round(2)
+                "Missing %": (
+                    missing_per_column.values / df.shape[0] * 100
+                ).round(2)
             })
-            st.dataframe(missing_table, use_container_width=True)
 
+            st.dataframe(
+                missing_table,
+                use_container_width=True
+            )
+
+            # Duplicate rows
             if duplicate_count > 0:
                 st.markdown("**Duplicate rows**")
-                st.dataframe(df[duplicate_mask], use_container_width=True)
+                st.dataframe(
+                    df[duplicate_mask],
+                    use_container_width=True
+                )
             else:
                 st.info("No duplicate rows were found.")
 
+            # ---------- Structured Quality Report (FR-03) ----------
+            st.subheader("Structured Data Quality Report")
+
+            st.write(
+                "This report summarizes the quality issues "
+                "detected in the uploaded dataset."
+            )
+
+            report_data = pd.DataFrame({
+                "Quality Check": [
+                    "Dataset Information",
+                    "Missing Values",
+                    "Duplicate Rows"
+                ],
+                "Result": [
+                    f"{df.shape[0]} rows and {df.shape[1]} columns",
+                    f"{total_missing} missing values ({missing_percent:.2f}%)",
+                    f"{duplicate_count} duplicate rows"
+                ],
+                "Status": [
+                    "Completed",
+                    "Issues Found" if total_missing > 0 else "Passed",
+                    "Issues Found" if duplicate_count > 0 else "Passed"
+                ]
+            })
+
+            st.dataframe(
+                report_data,
+                use_container_width=True,
+                hide_index=True
+            )
+
+            if total_missing == 0 and duplicate_count == 0:
+                st.success(
+                    "The dataset passed the performed quality checks."
+                )
+            else:
+                st.warning(
+                    "The dataset contains quality issues "
+                    "that may require attention."
+                )
+
+            # Download report
+            report_csv = report_data.to_csv(index=False).encode("utf-8-sig")
+
+            st.download_button(
+                label="Download Quality Report",
+                data=report_csv,
+                file_name="data_quality_report.csv",
+                mime="text/csv"
+            )
+
     except pd.errors.EmptyDataError:
-        st.error("The uploaded CSV file is empty. Please upload a file containing data.")
+        st.error(
+            "The uploaded CSV file is empty. "
+            "Please upload a file containing data."
+        )
 
     except Exception as error:
         st.error(f"Could not read the file: {error}")
+
