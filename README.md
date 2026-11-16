@@ -75,11 +75,6 @@ In the Week 4 prototype, the User Interface, File Handling, Error Message Handli
 - Data is processed in memory; no database is used in the initial version.
 - Streamlit and pandas were selected for rapid prototyping of a web interface and tabular data handling.
 
-## How to Run the Prototype
-Requirements: Python 3 and the packages listed in `requirements.txt`.
-```bash
-pip install -r requirements.txt
-streamlit run src/app.py
 
 ## GitHub Issues
 - [Issue #1: Define functional and non-functional requirements](https://github.com/sudeyldrm54/dataquality-inspector/issues/1)
