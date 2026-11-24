@@ -34,12 +34,18 @@ The target users are students, researchers, and data analysts who work with stru
 - Suggest possible data cleaning actions based on detected issues (mean imputation for numeric columns, mode imputation for categorical/text columns, and review for duplicate rows) (FR-04).
 - Modular separation of data quality analysis, report generation, and cleaning suggestion logic into `src/data_quality.py`.
 
+### Implemented (Week 6 testing and validation)
+- 23 test cases designed: 5 unit, 6 integration, 6 system/UI, 6 boundary.
+- 23 automated tests (unit, integration, boundary) in `tests/test_data_quality.py`; all passed in the final run.
+- Analysis time measured on a 10,000-row dataset (NFR-01).
+
 ### Planned
 - Detect inconsistent values and invalid entries.
 - Identify potentially unusual numerical values for user review.
 - Allow users to review and approve proposed changes before applying them (FR-05).
 - Preserve the original dataset during cleaning.
 - Compare data quality before and after cleaning (FR-06).
+
 
 ## Scope
 
